@@ -1,1 +1,20 @@
-[{"title":"product10","description":"description10","price":1200,"thumbnail":"no image","code":"djsh2","stock":32,"id":1},{"title":"product55","description":"description5","price":1200,"thumbnail":"no image","code":"d5h2","stock":32,"id":2},{"title":"product57","description":"description58","price":799,"thumbnail":"no image","code":"d5752","stock":32,"id":3},{"title":"product57","description":"description89","price":1200,"thumbnail":"no image","code":"d5652","stock":32,"id":4}]
+[
+    {
+        "title": "Product1",
+        "description": "Description1",
+        "price": 1200,
+        "thumbnail": "no image",
+        "code": "code123",
+        "stock": 25,
+        "ID": 1
+    },
+    {
+        "title": "Product2",
+        "description": "Description2",
+        "price": 1200,
+        "thumbnail": "no image",
+        "code": "code124",
+        "stock": 25,
+        "ID": 2
+    }
+]

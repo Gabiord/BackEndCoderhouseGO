@@ -1,11 +1,12 @@
-class product {
-  constructor(title, description, price, thumbnail, code, stock, countID) {
+class Product {
+  constructor(title, description, price, thumbnail, code, stock, ID) {
     this.title = title;
     this.description = description;
     this.price = price;
     this.thumbnail = thumbnail;
     this.code = code;
     this.stock = stock;
+    this.ID = ID;
   }
 }
 
@@ -35,28 +36,34 @@ class ProductManager {
         this.products = JSON.parse(archivoString);
         let confirm = this.products.some((product) => product.code === code);
         if (!confirm) {
-          let countID = (this.products.length += 1);
-          const newProduct = new product(
+          let posibleId = this.products.length + 1;
+          let confirmarSiIdExiste = this.products.some(
+            (product) => product.ID === posibleId
+          );
+          let ID = confirmarSiIdExiste ? posibleId + 1 : posibleId;
+
+          const newProduct = new Product(
             title,
             description,
             price,
             thumbnail,
             code,
             stock,
-            countID
+            ID
           );
-          this.products.push(newProduct);
 
-          let copiaArray = this.products.filter(elem => {return elem !== null})
-            
-          archivoString = JSON.stringify(copiaArray);
+          this.products.push(newProduct);
+          let eliminandoNulls = this.products.filter((elem) => {
+            return elem !== null;
+          });
+          archivoString = JSON.stringify(eliminandoNulls);
           await this.fs.promises.writeFile(this.FilePath, archivoString);
-          console.log("Producto agregado exitosamente")
+          console.log("Producto agregado exitosamente");
         } else {
-          console.log("El codigo esta respetido");
+          console.error("El codigo esta repetido");
         }
       } else {
-        console.log("Todos los campos son obligatorios");
+        console.error("Todos los campos son obligatorios");
       }
     } catch (error) {
       console.error(`Error creando producto, detalle del error: ${error}`);
@@ -132,10 +139,10 @@ class ProductManager {
         "utf-8"
       );
       let archivoJson = JSON.parse(archivoString);
-      let confirm = archivoJson.some((product) => product.id === id);
+      let confirm = archivoJson.some((product) => product.ID === id);
 
       if (confirm) {
-        this.products = archivoJson.filter((producto) => producto.id !== id);
+        this.products = archivoJson.filter((producto) => producto.ID !== id);
         archivoString = JSON.stringify(this.products);
         await this.fs.promises.writeFile(this.FilePath, archivoString);
         console.log("Producto eliminado exitosamente");
@@ -157,6 +164,8 @@ class ProductManager {
 
 const Manager = new ProductManager();
 
-Manager.updateProduct(3,"price",799)
+// Manager.getProducts()
 
+Manager.addProduct("Product2", "Description2", 1200, "no image", "code124", 25);
 
+// Manager.deleteProduct(2)
