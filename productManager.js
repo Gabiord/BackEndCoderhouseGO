@@ -1,15 +1,3 @@
-class Product {
-  constructor(title, description, price, thumbnail, code, stock, ID) {
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.thumbnail = thumbnail;
-    this.code = code;
-    this.stock = stock;
-    this.ID = ID;
-  }
-}
-
 class ProductManager {
   constructor() {
     (this.products = new Array()),
@@ -25,6 +13,14 @@ class ProductManager {
     }
   };
 
+  crearID = (prop1, prop2) => {
+    console.log(prop1)
+    console.log(prop2)
+
+    const arrayquedaundefined= prop1[prop2]
+    console.log(arrayquedaundefined)
+  }
+
   addProduct = async (title, description, price, thumbnail, code, stock) => {
     try {
       if (typeof stock !== "undefined") {
@@ -34,23 +30,19 @@ class ProductManager {
           "utf-8"
         );
         this.products = JSON.parse(archivoString);
+        await this.crearID(this.products, this.products.length)
         let confirm = this.products.some((product) => product.code === code);
         if (!confirm) {
-          let posibleId = this.products.length + 1;
-          let confirmarSiIdExiste = this.products.some(
-            (product) => product.ID === posibleId
-          );
-          let ID = confirmarSiIdExiste ? posibleId + 1 : posibleId;
 
-          const newProduct = new Product(
+          const newProduct = {
             title,
             description,
             price,
             thumbnail,
             code,
             stock,
-            ID
-          );
+            // ID
+          };
 
           this.products.push(newProduct);
           let eliminandoNulls = this.products.filter((elem) => {
@@ -116,12 +108,11 @@ class ProductManager {
         "utf-8"
       );
       this.products = JSON.parse(archivoString);
-
-      let index = this.products.findIndex((product) => product.id === id);
+      let index = this.products.findIndex((product) => product.ID === id);
       this.products[index][campo] = modificacion;
-
       archivoString = JSON.stringify(this.products);
       await this.fs.promises.writeFile(this.FilePath, archivoString);
+      console.log(`Se ha editado el ${campo} del producto ${id}`)
     } catch (error) {
       console.error(
         `Error al actualizar el producto, detalle del error: ${error}`
@@ -166,6 +157,8 @@ const Manager = new ProductManager();
 
 // Manager.getProducts()
 
-Manager.addProduct("Product2", "Description2", 1200, "no image", "code124", 25);
+Manager.addProduct("Product6", "Description6", 1200, "no image", "code54359vv", 28);
 
 // Manager.deleteProduct(2)
+
+// Manager.updateProduct(2,"price",600)
