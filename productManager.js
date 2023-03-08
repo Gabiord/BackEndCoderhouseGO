@@ -1,4 +1,6 @@
 class ProductManager {
+  static nroid = 1;
+
   constructor() {
     (this.products = new Array()),
       (this.DirPath = "./files"),
@@ -13,14 +15,6 @@ class ProductManager {
     }
   };
 
-  crearID = (prop1, prop2) => {
-    console.log(prop1)
-    console.log(prop2)
-
-    const arrayquedaundefined= prop1[prop2]
-    console.log(arrayquedaundefined)
-  }
-
   addProduct = async (title, description, price, thumbnail, code, stock) => {
     try {
       if (typeof stock !== "undefined") {
@@ -30,10 +24,9 @@ class ProductManager {
           "utf-8"
         );
         this.products = JSON.parse(archivoString);
-        await this.crearID(this.products, this.products.length)
+        let ID = Date.now();
         let confirm = this.products.some((product) => product.code === code);
         if (!confirm) {
-
           const newProduct = {
             title,
             description,
@@ -41,7 +34,7 @@ class ProductManager {
             thumbnail,
             code,
             stock,
-            // ID
+            ID,
           };
 
           this.products.push(newProduct);
@@ -88,7 +81,7 @@ class ProductManager {
         "utf-8"
       );
       this.products = JSON.parse(archivoString);
-      let productId = this.products.find((product) => product.id === prop);
+      let productId = this.products.find((product) => product.ID === prop);
 
       if (productId) {
         console.log(productId);
@@ -112,7 +105,7 @@ class ProductManager {
       this.products[index][campo] = modificacion;
       archivoString = JSON.stringify(this.products);
       await this.fs.promises.writeFile(this.FilePath, archivoString);
-      console.log(`Se ha editado el ${campo} del producto ${id}`)
+      console.log(`Se ha editado el ${campo} del producto ${id}`);
     } catch (error) {
       console.error(
         `Error al actualizar el producto, detalle del error: ${error}`
@@ -157,8 +150,17 @@ const Manager = new ProductManager();
 
 // Manager.getProducts()
 
-Manager.addProduct("Product6", "Description6", 1200, "no image", "code54359vv", 28);
+// Manager.addProduct(
+//   "Product4",
+//   "Description4",
+//   1200,
+//   "no image",
+//   "code126",
+//   28
+// );
 
-// Manager.deleteProduct(2)
+// Manager.updateProduct(1678247281758,"price",600)
 
-// Manager.updateProduct(2,"price",600)
+// Manager.getProductById(1678247246318)
+
+// Manager.deleteProduct(1678247308450)
