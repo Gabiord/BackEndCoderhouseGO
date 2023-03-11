@@ -13,8 +13,6 @@ app.use(Express.urlencoded({ extended: true }));
 
 app.get("/products", async (request, response) => {
   let limite = Number(request.query.limit);
-  console.log(limite);
-
   const totalProducts = await Manager.getProducts();
 
   if (limite > 0) {
