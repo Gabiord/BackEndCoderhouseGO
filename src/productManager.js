@@ -16,9 +16,8 @@ class ProductManager {
     }
   };
 
-  addProduct = async (title, description, price, thumbnail, code, stock) => {
+  addProduct = async (newProduct) => {
     try {
-      if (typeof stock !== "undefined") {
         await this.crearDir();
         let archivoString = await this.fs.promises.readFile(
           this.FilePath,
@@ -26,31 +25,20 @@ class ProductManager {
         );
         this.products = JSON.parse(archivoString);
         let ID = Date.now();
-        let confirm = this.products.some((product) => product.code === code);
+        newProduct.ID = ID;
+        newProduct.status = true;
+        let confirm = this.products.some((product) => product.code === newProduct.code);
         if (!confirm) {
-          const newProduct = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock,
-            ID,
-          };
-
           this.products.push(newProduct);
           let eliminandoNulls = this.products.filter((elem) => {
             return elem !== null;
           });
           archivoString = JSON.stringify(eliminandoNulls);
           await this.fs.promises.writeFile(this.FilePath, archivoString);
-          console.log("Producto agregado exitosamente");
+          return("Producto agregado exitosamente");
         } else {
-          console.error("El codigo esta repetido");
+          return("El codigo esta repetido");
         }
-      } else {
-        console.error("Todos los campos son obligatorios");
-      }
     } catch (error) {
       console.error(`Error creando producto, detalle del error: ${error}`);
       throw Error(`Error creando producto, detalle del error: ${error}`);
@@ -86,9 +74,9 @@ class ProductManager {
       let productId = this.products.find((product) => product.ID === prop);
 
       if (productId) {
-        console.log(productId);
+        return(productId);
       } else {
-        console.error("no se encontro ese ID");
+        return("No se encontro ese ID :(");
       }
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
