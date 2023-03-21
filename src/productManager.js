@@ -95,7 +95,7 @@ class ProductManager {
       this.products[index][campo] = modificacion;
       archivoString = JSON.stringify(this.products);
       await this.fs.promises.writeFile(this.FilePath, archivoString);
-      console.log(`Se ha editado el ${campo} del producto ${id}`);
+      return(`Se ha editado el ${campo} del producto ${id}`);
     } catch (error) {
       console.error(
         `Error al actualizar el producto, detalle del error: ${error}`
@@ -119,9 +119,9 @@ class ProductManager {
         this.products = archivoJson.filter((producto) => producto.ID !== id);
         archivoString = JSON.stringify(this.products);
         await this.fs.promises.writeFile(this.FilePath, archivoString);
-        console.log("Producto eliminado exitosamente");
+        return("Producto eliminado exitosamente");
       } else {
-        console.error("El ID no existe");
+        return("El ID no existe");
       }
     } catch (error) {
       console.error(

@@ -1,7 +1,7 @@
 [
     {
-        "title": "Product1",
-        "description": "Description1",
+        "title": "product1",
+        "description": "description2",
         "price": 1200,
         "category": "Category1",
         "thumbnail": "no image1",
@@ -12,7 +12,7 @@
     },
     {
         "title": "Product2",
-        "description": "Description2",
+        "description": "description update 1",
         "price": 500,
         "category": "Category2",
         "thumbnail": "no image2",
@@ -107,27 +107,6 @@
         "code": "code10",
         "stock": 5,
         "ID": 1678411155929,
-        "status": true
-    },
-    {
-        "title": "Product11",
-        "description": "Description11",
-        "price": 500,
-        "category": "Category11",
-        "thumbnail": "no image11",
-        "code": "code11",
-        "stock": 96,
-        "ID": 1679340260008,
-        "status": true
-    },
-    {
-        "title": "Product12",
-        "description": "Description12",
-        "price": 500,
-        "category": "Category12",
-        "code": "code12",
-        "stock": 96,
-        "ID": 1679340333914,
         "status": true
     }
 ]

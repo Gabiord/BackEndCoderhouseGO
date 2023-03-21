@@ -1,4 +1,4 @@
-import { response, Router } from "express";
+import { request, response, Router } from "express";
 import ProductManager from "../productManager.js"
 
 const router = Router();
@@ -7,7 +7,6 @@ const Manager = new ProductManager();
 router.get('/', async (request, response)=>{
     let limite = Number(request.query.limit);
     const totalProducts = await Manager.getProducts();
-  
     if (limite > 0) {
       const productsLimit = totalProducts.slice(0, limite);
       response.send(productsLimit);
@@ -36,11 +35,18 @@ router.post('/', async(request, response)=>{
     }
 })
 
-router.put(':/pid', async(request, response)=>{
-    
+router.put('/:pid', async(request, response)=>{
+    let id = Number(request.params.pid);
+    let campoModificado = request.body;
+    let {campo, modificacion}= campoModificado;
+    const pedido = await Manager.updateProduct(id,campo,modificacion)
+    response.send(pedido)
 })
 
-
-
+router.delete('/:pid', async(request,response)=>{
+    let id = Number(request.params.pid);
+    let deletedProduct = await Manager.deleteProduct(id)
+    response.send(deletedProduct)
+})
 
 export default router;
