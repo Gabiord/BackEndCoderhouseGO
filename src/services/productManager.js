@@ -4,7 +4,7 @@ class ProductManager {
 
   constructor() {
     (this.products = new Array()),
-      (this.DirPath = "src/files"),
+      (this.DirPath = "./files"),
       (this.FilePath = this.DirPath + "/products.json"),
       (this.fs = fs);
   }
@@ -78,7 +78,7 @@ class ProductManager {
       if (productId) {
         return(productId);
       } else {
-        return("No se encontro ese ID :(");
+        return(false);
       }
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
