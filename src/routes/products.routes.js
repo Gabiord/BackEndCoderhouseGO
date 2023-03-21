@@ -1,4 +1,4 @@
-import { request, response, Router } from "express";
+import { Router } from "express";
 import ProductManager from "../productManager.js"
 
 const router = Router();
@@ -25,7 +25,6 @@ router.post('/', async(request, response)=>{
 
     let newProduct = request.body;
     let {title, description, price, category, thumbnail, code, stock} = newProduct;
-    
     if (typeof (title && description && price && category && code && stock) !== "undefined"){
         const addProduct = await Manager.addProduct(newProduct)
         response.send(addProduct)

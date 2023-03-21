@@ -1,4 +1,4 @@
-import fs from "fs"
+import fs from "fs";
 
 class ProductManager {
 
@@ -16,14 +16,25 @@ class ProductManager {
     }
   };
 
+  bajarProductos = async () => {
+    let archivoString = await this.fs.promises.readFile(
+      this.FilePath,
+      "utf-8"
+    );
+    this.products = JSON.parse(archivoString);
+  }
+
+  subirProductos = async(prop) => {
+
+    let archivoString = JSON.stringify(prop);
+    await this.fs.promises.writeFile(this.FilePath, archivoString)
+
+  }
+
   addProduct = async (newProduct) => {
     try {
         await this.crearDir();
-        let archivoString = await this.fs.promises.readFile(
-          this.FilePath,
-          "utf-8"
-        );
-        this.products = JSON.parse(archivoString);
+        await this.bajarProductos();
         let ID = Date.now();
         newProduct.ID = ID;
         newProduct.status = true;
@@ -33,8 +44,7 @@ class ProductManager {
           let eliminandoNulls = this.products.filter((elem) => {
             return elem !== null;
           });
-          archivoString = JSON.stringify(eliminandoNulls);
-          await this.fs.promises.writeFile(this.FilePath, archivoString);
+          await this.subirProductos(eliminandoNulls);
           return("Producto agregado exitosamente");
         } else {
           return("El codigo esta repetido");
@@ -48,11 +58,7 @@ class ProductManager {
   getProducts = async () => {
     try {       
       if (fs.existsSync(this.FilePath)) {
-        let archivoString = await this.fs.promises.readFile(
-          this.FilePath,
-          "utf-8"
-        );
-        this.products = JSON.parse(archivoString)
+        await this.bajarProductos();
         return(this.products)
         
       } else {
@@ -66,11 +72,7 @@ class ProductManager {
 
   getProductById = async (prop) => {
     try {
-      let archivoString = await this.fs.promises.readFile(
-        this.FilePath,
-        "utf-8"
-      );
-      this.products = JSON.parse(archivoString);
+      await this.bajarProductos();
       let productId = this.products.find((product) => product.ID === prop);
 
       if (productId) {
@@ -86,15 +88,10 @@ class ProductManager {
 
   updateProduct = async (id, campo, modificacion) => {
     try {
-      let archivoString = await this.fs.promises.readFile(
-        this.FilePath,
-        "utf-8"
-      );
-      this.products = JSON.parse(archivoString);
+      await this.bajarProductos();
       let index = this.products.findIndex((product) => product.ID === id);
       this.products[index][campo] = modificacion;
-      archivoString = JSON.stringify(this.products);
-      await this.fs.promises.writeFile(this.FilePath, archivoString);
+      await this.subirProductos(this.products);
       return(`Se ha editado el ${campo} del producto ${id}`);
     } catch (error) {
       console.error(
@@ -108,17 +105,12 @@ class ProductManager {
 
   deleteProduct = async (id) => {
     try {
-      let archivoString = await this.fs.promises.readFile(
-        this.FilePath,
-        "utf-8"
-      );
-      let archivoJson = JSON.parse(archivoString);
-      let confirm = archivoJson.some((product) => product.ID === id);
+      await this.bajarProductos();
+      let confirm = this.products.some((product) => product.ID === id);
 
       if (confirm) {
-        this.products = archivoJson.filter((producto) => producto.ID !== id);
-        archivoString = JSON.stringify(this.products);
-        await this.fs.promises.writeFile(this.FilePath, archivoString);
+        this.products = this.products.filter((producto) => producto.ID !== id);
+        await this.subirProductos(this.products);
         return("Producto eliminado exitosamente");
       } else {
         return("El ID no existe");
