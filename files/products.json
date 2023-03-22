@@ -126,17 +126,13 @@
         "status": true
     },
     {
-        "title": "Product10",
-        "description": "Description10",
+        "title": "Product12",
+        "description": "Description12",
         "price": 500,
-        "category": "Category10",
-        "thumbnail": [
-            "image A",
-            "image B"
-        ],
-        "code": "code10",
+        "category": "Category12",
+        "code": "code12",
         "stock": 96,
-        "ID": 1679428052927,
+        "ID": 1679448817953,
         "status": true
     }
 ]

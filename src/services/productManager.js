@@ -1,7 +1,6 @@
 import fs from "fs";
 
 class ProductManager {
-
   constructor() {
     (this.products = new Array()),
       (this.DirPath = "./files"),
@@ -17,38 +16,39 @@ class ProductManager {
   };
 
   bajarProductos = async () => {
-    let archivoString = await this.fs.promises.readFile(
-      this.FilePath,
-      "utf-8"
-    );
+    let archivoString = await this.fs.promises.readFile(this.FilePath, "utf-8");
     this.products = JSON.parse(archivoString);
-  }
+  };
 
-  subirProductos = async(prop) => {
-
+  subirProductos = async (prop) => {
     let archivoString = JSON.stringify(prop);
-    await this.fs.promises.writeFile(this.FilePath, archivoString)
-
-  }
+    await this.fs.promises.writeFile(this.FilePath, archivoString);
+  };
 
   addProduct = async (newProduct) => {
     try {
-        await this.crearDir();
-        await this.bajarProductos();
-        let ID = Date.now();
-        newProduct.ID = ID;
-        newProduct.status = true;
-        let confirm = this.products.some((product) => product.code === newProduct.code);
-        if (!confirm) {
-          this.products.push(newProduct);
-          let eliminandoNulls = this.products.filter((elem) => {
-            return elem !== null;
-          });
-          await this.subirProductos(eliminandoNulls);
-          return({status: "Success", message: "Producto agregado exitosamente", data: newProduct});
-        } else {
-          return({status: "Reject", message: "Producto con codigo repetido"});
-        }
+      await this.crearDir();
+      await this.bajarProductos();
+      let ID = Date.now();
+      newProduct.ID = ID;
+      newProduct.status = true;
+      let confirm = this.products.some(
+        (product) => product.code === newProduct.code
+      );
+      if (!confirm) {
+        this.products.push(newProduct);
+        let eliminandoNulls = this.products.filter((elem) => {
+          return elem !== null;
+        });
+        await this.subirProductos(eliminandoNulls);
+        return {
+          status: "Success",
+          message: "Producto agregado exitosamente",
+          data: newProduct,
+        };
+      } else {
+        return { status: "Reject", message: "Producto con codigo repetido" };
+      }
     } catch (error) {
       console.error(`Error creando producto, detalle del error: ${error}`);
       throw Error(`Error creando producto, detalle del error: ${error}`);
@@ -56,13 +56,12 @@ class ProductManager {
   };
 
   getProducts = async () => {
-    try {       
+    try {
       if (fs.existsSync(this.FilePath)) {
         await this.bajarProductos();
-        return({status:"Success", payload: this.products})
-        
+        return { status: "Success", payload: this.products };
       } else {
-        return({status:"Reject", message:"No hay productos para mostrar"});
+        return { status: "Reject", message: "No hay productos para mostrar" };
       }
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
@@ -76,11 +75,10 @@ class ProductManager {
       let productId = this.products.find((product) => product.ID === prop);
 
       if (!productId) {
-        return({status:"Reject", message:"No existe ese producto"});
-      } 
+        return { status: "Reject", message: "No existe ese producto" };
+      }
 
-      return({status:"Success", payload: productId});
-      
+      return { status: "Success", payload: productId };
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
       throw Error(`Error cargando productos, detalle del error: ${error}`);
@@ -93,7 +91,10 @@ class ProductManager {
       let index = this.products.findIndex((product) => product.ID === id);
       this.products[index][campo] = modificacion;
       await this.subirProductos(this.products);
-      return(`Se ha editado el ${campo} del producto ${id}`);
+      return {
+        status: "Success",
+        message: `Se ha editado el ${campo} del producto ${id}`,
+      };
     } catch (error) {
       console.error(
         `Error al actualizar el producto, detalle del error: ${error}`
@@ -109,12 +110,17 @@ class ProductManager {
       await this.bajarProductos();
       let confirm = this.products.some((product) => product.ID === id);
 
+      console.log(confirm);
+
       if (confirm) {
         this.products = this.products.filter((producto) => producto.ID !== id);
         await this.subirProductos(this.products);
-        return({status: "Success", message:"Producto eliminado exitosamente"});
+        return {
+          status: "Success",
+          message: "Producto eliminado exitosamente",
+        };
       } else {
-        return({status: "Reject", message: "El ID no existe :("});
+        return { status: "Reject", message: "El ID no existe :(" };
       }
     } catch (error) {
       console.error(
