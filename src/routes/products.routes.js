@@ -18,13 +18,11 @@ router.get('/', async (request, response)=>{
 router.get('/:pid', async (request, response) => {
     const param = Number(request.params.pid);
     const product = await productManager.getProductById(param);
-    if(product){response.send(product)}
-    else{response.send("no se encontro ese ID :(")}
+    response.send(product)
     
 });
 
 router.post('/', async(request, response)=>{
-
     let newProduct = request.body;
     let {title, description, price, category, thumbnail, code, stock} = newProduct;
     if (typeof (title && description && price && category && code && stock) !== "undefined"){
@@ -45,7 +43,6 @@ router.put('/:pid', async(request, response)=>{
     if (!verifID){
         response.send("El producto no existe :(")
     }
-    console.log(verifID.ID)
     const pedido = await productManager.updateProduct(id,campo,modificacion)
     response.send(pedido)
 })

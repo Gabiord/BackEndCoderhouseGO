@@ -9,7 +9,6 @@ const cartManager = new CartManager();
 const productManager = new ProductManager();
 
 router.post('/', async(request, response)=>{
-    
     let pedido = await cartManager.addCart();
     response.send(pedido);
 });
@@ -25,18 +24,20 @@ router.post('/:cid/product/:pid', async(request,response)=>{
     const cid = Number(request.params.cid)
     const pid = Number(request.params.pid)
 
-    const product = await productManager.getProductById(pid);
-    if(!product){
-        response.send("el producto no existe :(")
+    await productManager.bajarProductos();
+    const product = productManager.products.some(product => product.ID === pid)
+
+    await cartManager.bajarCarts();
+    const cart = cartManager.carts.some(cart => cart.ID === cid)
+
+    if(!product || !cart){
+        response.send({status: "Reject", message: "El ID del producto o carrito no existen"});
     }
 
-    const cart = await cartManager.getCartById(cid)
-    if(!cart){
-        response.send("el cart no existe :(")
-    }
-
+    else{
     const pedido = await cartManager.addProductToCart(cid,pid);
     response.send(pedido);
+    }
 })
 
 export default router;

@@ -45,9 +45,9 @@ class ProductManager {
             return elem !== null;
           });
           await this.subirProductos(eliminandoNulls);
-          return("Producto agregado exitosamente");
+          return({status: "Success", message: "Producto agregado exitosamente", data: newProduct});
         } else {
-          return("El codigo esta repetido");
+          return({status: "Reject", message: "Producto con codigo repetido"});
         }
     } catch (error) {
       console.error(`Error creando producto, detalle del error: ${error}`);
@@ -59,10 +59,10 @@ class ProductManager {
     try {       
       if (fs.existsSync(this.FilePath)) {
         await this.bajarProductos();
-        return(this.products)
+        return({status:"Success", payload: this.products})
         
       } else {
-        return(this.products);
+        return({status:"Reject", message:"No hay productos para mostrar"});
       }
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
@@ -75,11 +75,12 @@ class ProductManager {
       await this.bajarProductos();
       let productId = this.products.find((product) => product.ID === prop);
 
-      if (productId) {
-        return(productId);
-      } else {
-        return(false);
-      }
+      if (!productId) {
+        return({status:"Reject", message:"No existe ese producto"});
+      } 
+
+      return({status:"Success", payload: productId});
+      
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
       throw Error(`Error cargando productos, detalle del error: ${error}`);
@@ -111,9 +112,9 @@ class ProductManager {
       if (confirm) {
         this.products = this.products.filter((producto) => producto.ID !== id);
         await this.subirProductos(this.products);
-        return("Producto eliminado exitosamente");
+        return({status: "Success", message:"Producto eliminado exitosamente"});
       } else {
-        return("El ID no existe");
+        return({status: "Reject", message: "El ID no existe :("});
       }
     } catch (error) {
       console.error(

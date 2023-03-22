@@ -37,12 +37,12 @@ class cartManager{
             await this.bajarCarts();
 
             let newCart={};
-            newCart.ID = Date.now();
+            newCart.ID = this.carts.length+1;
             newCart.products=[];
 
             this.carts.push(newCart)
             this.subirCarts(this.carts)
-            return this.carts
+            return ({status: "Success", message: "Carrito creado exitosamente", data: newCart})
         }
         catch (error) {
             console.error(`Error creando Carrito, detalle del error: ${error}`);
@@ -56,11 +56,12 @@ class cartManager{
         await this.bajarCarts();
         let cartId = this.carts.find((cart) => cart.ID === prop);
 
-        if (cartId) {
-          return(cartId);
-        } else {
-          return(false);
+        if (!cartId) {
+          return({status:"Reject", message:"No existe ese carrito"});
         }
+        
+        return({status:"Success", payload: cartId});
+        
       } catch (error) {
         console.error(`Error cargando carrito, detalle del error: ${error}`);
         throw Error(`Error cargando carrito, detalle del error: ${error}`);
@@ -69,9 +70,23 @@ class cartManager{
 
     addProductToCart = async(cid,pid) => {
         try{
-            let totalCarts = this.bajarCarts();
-                
+            await this.bajarCarts();
+            let indexCart = this.carts.findIndex(cart => cart.ID === cid);
+            let cart = this.carts[indexCart].products;
 
+            let indexProduct = cart.findIndex(producto => producto.product === pid)
+            if(indexProduct<0){
+              let newProduct = {"product":pid, "quantity":1}
+              cart.push(newProduct)
+              this.carts[indexCart].products = cart;
+              await this.subirCarts(this.carts)
+              return({status: "Success", message: `se agrego el item del producto ${pid} al carrito ID:${cid}`})
+            }
+            else{
+              this.carts[indexCart].products[indexProduct].quantity+=1
+              await this.subirCarts(this.carts)
+              return({status: "Success", message: `se sumo un item del producto ${pid} al carrito ID:${cid}`})
+            }
         }
         catch(error){
             console.error(`Error cargando producto al carrito, detalle del error: ${error}`);
