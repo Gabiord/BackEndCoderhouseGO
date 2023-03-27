@@ -1,4 +1,4 @@
-import { request, response, Router } from "express";
+import { Router } from "express";
 import CartManager from "../services/cartManager.js";
 import ProductManager from "../services/productManager.js";
 

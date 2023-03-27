@@ -3,7 +3,7 @@ import fs from "fs";
 class ProductManager {
   constructor() {
     (this.products = new Array()),
-      (this.DirPath = "./files"),
+      (this.DirPath = "../files"),
       (this.FilePath = this.DirPath + "/products.json"),
       (this.fs = fs);
   }
@@ -59,9 +59,9 @@ class ProductManager {
     try {
       if (fs.existsSync(this.FilePath)) {
         await this.bajarProductos();
-        return { status: "Success", payload: this.products };
+        return(this.products);
       } else {
-        return { status: "Reject", message: "No hay productos para mostrar" };
+        return("No hay productos para mostrar");
       }
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
@@ -77,8 +77,8 @@ class ProductManager {
       if (!productId) {
         return { status: "Reject", message: "No existe ese producto" };
       }
-
-      return { status: "Success", payload: productId };
+      return(productId);
+      
     } catch (error) {
       console.error(`Error cargando productos, detalle del error: ${error}`);
       throw Error(`Error cargando productos, detalle del error: ${error}`);

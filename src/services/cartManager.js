@@ -3,7 +3,7 @@ import fs from "fs";
 class cartManager {
   constructor() {
     (this.carts = new Array()),
-      (this.DirPath = "./files"),
+      (this.DirPath = "../files"),
       (this.FilePath = this.DirPath + "/cart.json"),
       (this.fs = fs);
   }
