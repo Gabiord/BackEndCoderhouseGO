@@ -33,13 +33,7 @@ formDeleteProduct.addEventListener("submit", (evt)=> {
     socket.emit("deleteProductID", ID)
 })
 
-const totalProducts = document.getElementById('totalProducts');
 
-let varcomun = socket.on("msgprueba", data => {
-    let msgprueba = '';
-    data.forEach(data => {
-        
-    })})
 
 
 

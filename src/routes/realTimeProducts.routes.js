@@ -14,22 +14,22 @@ router.get("/", async(request,respose)=>{
 })
 
 
-// router.post("/", async (request, response) => {
-//   let newProduct = request.body;
-//   let { title, description, price, category, thumbnail, code, stock } =
-//     newProduct;
-//   if (
-//     typeof (title && description && price && category && code && stock) !==
-//     "undefined"
-//   ) {
-//     const addProduct = await productManager.addProduct(newProduct);
-//     response.send(addProduct);
-//   } else {
-//     response.send({
-//       status: "Reject",
-//       message: "Todos los campos son obligatorios (Excepto thumbail)",
-//     });
-//   }
-// });
+router.post("/", async (request, response) => {
+  let newProduct = variable;
+  let { title, description, price, category, thumbnail, code, stock } =
+    newProduct;
+  if (
+    typeof (title && description && price && category && code && stock) !==
+    "undefined"
+  ) {
+    const addProduct = await productManager.addProduct(newProduct);
+    response.send(addProduct);
+  } else {
+    response.send({
+      status: "Reject",
+      message: "Todos los campos son obligatorios (Excepto thumbail)",
+    });
+  }
+});
 
 export default router;

@@ -4,7 +4,7 @@ import cartRoutes from "./routes/cart.routes.js";
 import realTimeProductsRoutes from "./routes/realTimeProducts.routes.js"
 import __dirname from "./utils.js";
 import handlebars from 'express-handlebars';
-import { Server, Socket } from "socket.io";
+import { Server} from "socket.io";
 
 const app = Express();
 
@@ -20,13 +20,13 @@ socketServer.on('connection', socket => {
 
   socket.on('newProduct', data => {
     console.log(data)
+    const variable = data;
+    return variable
   })
 
-  let array = []
   socket.on("deleteProductID", data => {
     console.log(data)
-    array.push(data)
-    socket.emit("msgprueba",array)
+  
   });
 })
 

@@ -12,18 +12,19 @@ router.get("/", async (request, response) => {
       const productsLimit = totalProducts.slice(0, limite);
       let productsToRender = {
         limit: true,
-        totalProducts: false,
+        totalP: false,
         productsLimit
       }
+      console.log(productsToRender)
       response.render('home',productsToRender);
-
   }
   else {
       let productsToRender = {
         limit: false,
-        totalProducts: true,
+        totalP: true,
         totalProducts
       }
+      console.log(productsToRender)
       response.render('home',productsToRender);
       }
   }
