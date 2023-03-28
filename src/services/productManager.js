@@ -3,7 +3,7 @@ import fs from "fs";
 class ProductManager {
   constructor() {
     (this.products = new Array()),
-      (this.DirPath = "../files"),
+      (this.DirPath = "./files"),
       (this.FilePath = this.DirPath + "/products.json"),
       (this.fs = fs);
   }
@@ -109,9 +109,6 @@ class ProductManager {
     try {
       await this.bajarProductos();
       let confirm = this.products.some((product) => product.ID === id);
-
-      console.log(confirm);
-
       if (confirm) {
         this.products = this.products.filter((producto) => producto.ID !== id);
         await this.subirProductos(this.products);

@@ -1,9 +1,15 @@
-import { request, Router } from "express";
+import { Router } from "express";
 import ProductManager from "../services/productManager.js";
+import { Server } from "socket.io";
+import Express from "express";
 
-
-const router = Router();
 const productManager = new ProductManager();
+const router = Router();
+const socketServer = new Server();
+
+socketServer.on('connection', socket=>{
+
+})
 
 router.get("/", async(request,respose)=>{
     const totalProducts = await productManager.getProducts();
@@ -13,9 +19,9 @@ router.get("/", async(request,respose)=>{
     respose.render('realTimeProducts',productsToRender)
 })
 
+router.post("/", async (request, response, data) => {
 
-router.post("/", async (request, response) => {
-  let newProduct = variable;
+  let newProduct = data;
   let { title, description, price, category, thumbnail, code, stock } =
     newProduct;
   if (
