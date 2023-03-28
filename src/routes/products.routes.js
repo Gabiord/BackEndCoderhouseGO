@@ -15,7 +15,6 @@ router.get("/", async (request, response) => {
         totalP: false,
         productsLimit
       }
-      console.log(productsToRender)
       response.render('home',productsToRender);
   }
   else {
@@ -24,7 +23,6 @@ router.get("/", async (request, response) => {
         totalP: true,
         totalProducts
       }
-      console.log(productsToRender)
       response.render('home',productsToRender);
       }
   }
