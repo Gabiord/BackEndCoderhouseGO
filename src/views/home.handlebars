@@ -1,0 +1,44 @@
+<div>
+    <h1> Productos </h1>
+    {{#if limit}}
+        {{#each productsLimit}}
+            <ul>
+                <li>Nombre: {{this.title}}</li>
+                <li>Descripcion: {{this.description}}</li>
+                <li>Precio: {{this.price}}</li>
+                <li>Categoria: {{this.category}}</li>
+                <li>Codigo: {{this.code}}</li>
+                <li>Stock: {{this.stock}}</li>
+                <li>ID: {{this.ID}}</li>
+                <li>Estatus: {{this.status}}</li>
+            </ul>
+        {{/each}}
+
+        {{else if totalProducts}}
+            {{#each totalProducts}}
+                <ul>
+                    <li>Nombre: {{this.title}}</li>
+                    <li>Descripcion: {{this.description}}</li>
+                    <li>Precio: {{this.price}}</li>
+                    <li>Categoria: {{this.category}}</li>
+                    <li>Codigo: {{this.code}}</li>
+                    <li>Stock: {{this.stock}}</li>
+                    <li>ID: {{this.ID}}</li>
+                    <li>Estatus: {{this.status}}</li>
+                </ul>
+            {{/each}}
+
+        {{else}}
+                <ul>
+                    <li>Nombre: {{title}}</li>
+                    <li>Descripcion: {{description}}</li>
+                    <li>Precio: {{price}}</li>
+                    <li>Categoria: {{category}}</li>
+                    <li>Codigo: {{code}}</li>
+                    <li>Stock: {{stock}}</li>
+                    <li>ID: {{ID}}</li>
+                    <li>Estatus: {{status}}</li>
+                </ul>
+    {{/if}}
+</div>
+

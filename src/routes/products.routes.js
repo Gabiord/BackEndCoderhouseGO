@@ -7,18 +7,37 @@ const productManager = new ProductManager();
 router.get("/", async (request, response) => {
   let limite = Number(request.query.limit);
   const totalProducts = await productManager.getProducts();
+
   if (limite > 0) {
-    const productsLimit = totalProducts.slice(0, limite);
-    response.send(productsLimit);
-  } else {
-    response.send(totalProducts);
+      const productsLimit = totalProducts.slice(0, limite);
+      let productsToRender = {
+        limit: true,
+        totalP: false,
+        productsLimit
+      }
+      response.render('home',productsToRender);
   }
-});
+  else {
+      let productsToRender = {
+        limit: false,
+        totalP: true,
+        totalProducts
+      }
+      response.render('home',productsToRender);
+      }
+  }
+);
 
 router.get("/:pid", async (request, response) => {
   const param = Number(request.params.pid);
   const product = await productManager.getProductById(param);
-  response.send(product);
+  let productsToRender = {
+    limit: false,
+    totalProducts: false,
+    product
+  }
+
+  response.render('home',productsToRender.product);
 });
 
 router.post("/", async (request, response) => {
@@ -60,5 +79,6 @@ router.delete("/:pid", async (request, response) => {
   let deletedProduct = await productManager.deleteProduct(id);
   response.send(deletedProduct);
 });
+
 
 export default router;
