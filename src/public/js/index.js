@@ -1,6 +1,7 @@
 // Configuracion del socket del lado del cliente.
 const socket = io();
 
+
 //para renderizar los productos
 socket.on('totalProducts', data => {
     console.log(data)
@@ -45,7 +46,6 @@ formProduct.addEventListener("submit", (evt) => {
     }
     socket.emit('newProduct', newProduct)
     formProduct.reset();
-    
 });
 
 //Para eliminar un producto
@@ -56,6 +56,14 @@ formDeleteProduct.addEventListener("submit", (evt)=> {
     socket.emit("deleteProductID", ID);
     formDeleteProduct.reset();
 })
+
+
+
+
+
+
+
+
 
 
 

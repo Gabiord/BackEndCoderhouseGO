@@ -1,0 +1,20 @@
+<h1>Lista de Mensajes</h1>
+
+<div>
+    <h2>Nuevo mensaje:</h2>
+    <form id="formMessage">
+        <label for="user" >Email de Usuario:</label>
+        <input type="text" name="user" id="user" required><br>
+
+        <label for="message">Mensaje:</label>
+        <textarea name="message" id="message" required></textarea><br>
+        
+        <input type="submit" value="Enviar">
+    </form>
+</div>
+
+<div id="allMessages"></div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

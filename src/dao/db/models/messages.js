@@ -3,12 +3,6 @@ import mongoose from "mongoose";
 const collectionName = "messages";
 
 const messagesSchema = new mongoose.Schema({
-    user_name: { 
-        type: String,
-        require: [true, 'El nombre es requerido'],
-        minlength: [3, 'El nombre es muy corto'],
-        maxlength: [10, 'El nombre es muy largo']
-                },
     user_email: {
         type: String,
         require: [true, 'El email es requerido'],
@@ -24,17 +18,9 @@ const messagesSchema = new mongoose.Schema({
             }
         ]
     },
-    user_phone:{
-        type: Number,
-        require: [true, 'El telefono es requerido'],
-        min: [1000000000, 'El telefono es muy corto'],
-        max: [9999999999, 'El telefono es muy largo']
-    },
     user_message: {
         type: String, 
         require: [true, 'El mensaje es requerido'],
-        minlength: [10, 'El mensaje es muy corto'],
-        maxlength: [100, 'El mensaje es muy largo']
     }   
 },{timestamps: true}
 )

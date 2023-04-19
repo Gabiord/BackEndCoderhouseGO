@@ -14,7 +14,7 @@ export async function saveMessage(request, response){
 export async function getAllMessages(request,response){
     try {
         const messages = await MessageService.getMessages();
-        response.status(200).json(messages)
+        response.render('chat',{messages})
     } catch (error) {
         response.status(400).json(error.message)
     }

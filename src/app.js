@@ -7,7 +7,9 @@ import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import ProductManager from "./dao/filesystem/services/product.service.js";
-import "./db.js"
+import "./db.js";
+import * as MessagesService from "./dao/db/message.service.js"
+
 
 const app = Express();
 const productManager = new ProductManager();
@@ -41,7 +43,15 @@ socketServer.on("connection", async(socket) => {
     const totalProducts = await productManager.getProducts();
     socket.emit("totalProducts",totalProducts)
   });
+
+  socket.on('newMessage', async (data) => {
+    await MessagesService.saveNewMessage(data);
+    const totalMessages = await MessagesService.getMessages();
+    socket.emit("totalMessages", totalMessages)
+  })
+
 });
+
 
 //Configuracion Postman
 app.use(Express.json());
