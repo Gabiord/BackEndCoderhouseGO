@@ -2,7 +2,6 @@ const socket = io();
 
 //para renderizar los mensajes
 socket.on('totalMessages', data => {
-    console.log(data)
     let messagesList = "";
 
     data.forEach((message) => {

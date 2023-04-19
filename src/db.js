@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env.MONGO_URL)
+console.log(process.env.MONGO_URL) // Ver porque esto me llega undefined???
 
 const conectMongoDB = async () => {
     try{

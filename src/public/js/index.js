@@ -4,7 +4,6 @@ const socket = io();
 
 //para renderizar los productos
 socket.on('totalProducts', data => {
-    console.log(data)
     let productsList = "";
 
     data.forEach((product) => {
