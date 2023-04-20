@@ -3,11 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env.MONGO_URL) // Ver porque esto me llega undefined???
-
 const conectMongoDB = async () => {
     try{
-        await mongoose.connect("mongodb+srv://admin:admin@cluster0.y2fnfpw.mongodb.net/ecommerce");
+        await mongoose.connect(process.env.MONGO_URL);
         console.log("Conectado con exito a MongoDB usando Moongose.")
     }catch(error){
         console.error("No se pudo conectar a la BD usando Moongose: " + error);
