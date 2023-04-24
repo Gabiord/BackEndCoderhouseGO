@@ -1,9 +1,9 @@
-import * as ProductService from "../dao/db/products.service.js"
+import productsModel from "../dao/db/models/products.js"
 
-export async function saveProduct(request,response){
+export async function saveNewProduct(request,response){
     try {
         const {body} = request;
-        const confirm = await ProductService.saveNewProduct(body);
+        const confirm = await productsModel.create(newProduct);
         response.status(200).json(confirm)
 
     } catch (error) {
@@ -13,7 +13,7 @@ export async function saveProduct(request,response){
 
 export async function getProducts(request, response){
     try {
-        const products = await ProductService.getAllProducts();
+        const products = await productsModel.find();
         response.status(200).json(products)
     } catch (error) {
         response.status(400).json(error.message)

@@ -8,7 +8,7 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import ProductManager from "./dao/filesystem/services/product.service.js";
 import "./db.js";
-import * as MessagesService from "./dao/db/message.service.js"
+import * as MessagesController from "./controllers/messages.controller.js"
 
 
 const app = Express();
@@ -45,8 +45,8 @@ socketServer.on("connection", async(socket) => {
   });
 
   socket.on('newMessage', async (data) => {
-    await MessagesService.saveNewMessage(data);
-    const totalMessages = await MessagesService.getMessages();
+    await MessagesController.saveNewMessage(data);
+    const totalMessages = await MessagesController.getAllMessages();
     socket.emit("totalMessages", totalMessages)
   })
 

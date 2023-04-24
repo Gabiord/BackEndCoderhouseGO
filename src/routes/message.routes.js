@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", MessagesController.getAllMessages);
 
-router.post("/", MessagesController.saveMessage);
+router.post("/", MessagesController.saveNewMessage);
 
 export default router;

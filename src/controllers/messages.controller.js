@@ -1,19 +1,18 @@
-import * as MessageService from "../dao/db/message.service.js";
+import  messageModel  from "../dao/db/models/messages.js";
 
-export async function saveMessage(request, response){
+export async function saveNewMessage(request, response){
     try {
         const {body} = request;
-        const confirm = await MessageService.saveNewMessage(body);
+        const confirm = await messageModel.create(body);
         response.status(200).json(confirm)
     } catch (error) {
         response.status(400).json(error.message)
     }
 }
 
-
 export async function getAllMessages(request,response){
     try {
-        const messages = await MessageService.getMessages();
+        const messages = await messageModel.find();
         response.render('chat',{messages})
     } catch (error) {
         response.status(400).json(error.message)
