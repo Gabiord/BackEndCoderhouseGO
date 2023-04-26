@@ -64,16 +64,16 @@ export async function addProductToCart(request, response){
         const pid = (request.params.pid)
         const qty = Number(request.body.qty);
 
-        const cart = await cartsModel.findById(cid).populate('cart_products')
+        const cart = await cartsModel.findById(cid)
 
-        const index = await cart.cart_products.findIndex((id)=> id.products == pid);
+        const index = await cart.cart_products.findIndex((id)=> id.products._id == pid);
+        console.log(cart.cart_products[index].quantity)
 
         if (index<0) {
             cart.cart_products.push({products:pid, quantity:qty})
         } else {
-            cart.cart_products[index].quantity = qty;
+            cart.cart_products[index].quantity+=1;
         }
-
         let result = await cartsModel.updateOne({_id:cid},cart)
         response.status(200).json(result)
 
