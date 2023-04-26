@@ -1,7 +1,6 @@
 import Express from "express";
 import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
-import realTimeProductsRoutes from "./routes/realTimeProducts.routes.js";
 import messagesRoutes from "./routes/message.routes.js"
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
@@ -68,5 +67,4 @@ app.use(Express.static(__dirname + "/public"));
 //Declaraciones Router
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
-app.use("/realTimeProducts", realTimeProductsRoutes);
 app.use("/api/messages", messagesRoutes);

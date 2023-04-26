@@ -22,4 +22,3 @@ router.delete("/:cid", CartsController.deleteAllproductsofCart);
 
 export default router;
 
-
