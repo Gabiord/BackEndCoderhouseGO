@@ -3,9 +3,9 @@ import cartsModel  from "../dao/db/models/carts.js";
 export async function getCartById(request, response){
     try{
         const cid = (request.params.cid);
-        const cart = await cartsModel.findOne({_id:cid});
-
-        response.status(200).json(cart.cart_products)
+        const cart = await cartsModel.findOne({_id:cid})
+        console.log(cart.cart_products)
+        response.status(200).render('cart',cart)
     } catch (error){
         response.status(400).json(error.message)
     }
@@ -65,9 +65,7 @@ export async function addProductToCart(request, response){
         const qty = Number(request.body.qty);
 
         const cart = await cartsModel.findById(cid)
-
         const index = await cart.cart_products.findIndex((id)=> id.products._id == pid);
-        console.log(cart.cart_products[index].quantity)
 
         if (index<0) {
             cart.cart_products.push({products:pid, quantity:qty})
