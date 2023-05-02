@@ -1,14 +1,12 @@
-{{#if session}}
-<h2>Bienvenido/a {{session.name}}</h2>
+{{#if sessionUser}}
+<h2>Bienvenido/a {{sessionUser.name}}</h2>
 <h3>Datos:</h3>
-<p>Email: {{session.email}}</p>
-<p>Edad: {{session.age}}</p>
+<p>Email: {{sessionUser.email}}</p>
+<p>Edad: {{sessionUser.age}}</p>
+<p>Rol: {{#if sessionAdmin}}Admin{{^}}Usuario{{/if}}</p>
 <a class="button" href="http://localhost:8080/logout">Cerrar Sesion</a>
-
 {{else}}
-
 <a class="button" href="http://localhost:8080/">Iniciar Sesion</a>
-
 {{/if}}
 
 <div>
