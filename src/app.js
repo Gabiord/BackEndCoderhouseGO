@@ -2,12 +2,15 @@ import Express from "express";
 import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import messagesRoutes from "./routes/message.routes.js"
+import sessionRoutes from "./routes/sessions.routes.js"
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import ProductManager from "./dao/filesystem/services/product.service.js";
 import "./db.js";
 import * as MessagesController from "./controllers/messages.controller.js"
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 
 const app = Express();
@@ -64,7 +67,20 @@ app.set("view engine", "handlebars");
 //Configuracion para utilizar carpeta public
 app.use(Express.static(__dirname + "/public"));
 
+//Configuracion para sesiones
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL,
+      mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
+      ttl: 45
+      }),
+  secret: "thesecret",
+  resave: false,
+  saveUninitialized: true
+}))
+
 //Declaraciones Router
+app.use("/", sessionRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/messages", messagesRoutes);

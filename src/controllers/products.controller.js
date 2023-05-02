@@ -39,14 +39,17 @@ export async function getProducts(request, response){
             "hasNextPage": products.hasNextPage,
             "prevLink": products.prevPage,
             "nextLink": products.nextPage,
-            "sj":response.limit
+            "sj":response.limit,
         }
+
+        const session = request.session.user
+        console.log(session)
 
         respuesta.prevLink = respuesta.hasPrevPage?`http://localhost:8080/api/products?limit=${limit?limit:''}&page=${respuesta.prevPage}&query=${query?query:''}&sort=${sort?sort:''}`:'';
         respuesta.nextLink = respuesta.hasNextPage?`http://localhost:8080/api/products?limit=${limit?limit:''}&page=${respuesta.nextPage}&query=${query?query:''}&sort=${sort?sort:''}`:'';
         respuesta.isValid= !(page<=0||page>respuesta.totalPages)
 
-        response.status(200).render('products',respuesta)
+        response.status(200).render('products',{respuesta, session})
 
     } catch (error) {
         response.status(400).json(error.message)

@@ -1,6 +1,19 @@
-{{#if isValid}}
+{{#if session}}
+<h2>Bienvenido/a {{session.name}}</h2>
+<h3>Datos:</h3>
+<p>Email: {{session.email}}</p>
+<p>Edad: {{session.age}}</p>
+<a class="button" href="http://localhost:8080/logout">Cerrar Sesion</a>
+
+{{else}}
+
+<a class="button" href="http://localhost:8080/">Iniciar Sesion</a>
+
+{{/if}}
+
 <div>
-    {{#each payload}}
+    <h1>Productos</h1>
+    {{#each respuesta.payload}}
     <div>
         <p>Nombre: {{this.product_name}}</p>
         <p>Descripcion: {{this.product_description}}</p>
@@ -15,18 +28,16 @@
 <br/>
 <br/>
 <div>
-    {{#if hasPrevPage}}
-        <a href={{this.prevLink}}><< Anterior</a>
+    {{#if respuesta.hasPrevPage}}
+        <a href={{respuesta.prevLink}}><< Anterior</a>
     {{/if}}
     &nbsp;
-    {{this.page}}
+    {{respuesta.page}}
     &nbsp;
-     {{#if hasNextPage}}
-        <a href={{this.nextLink}}>Siguiente >></a>
+     {{#if respuesta.hasNextPage}}
+        <a href={{respuesta.nextLink}}>Siguiente >></a>
     {{/if}} 
 </div>
-{{else}}
-<h1>No hay productos para mostrar</h1>
-{{/if}}
+
 
 <script src="/js/products.js"></script>

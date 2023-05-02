@@ -1,10 +1,11 @@
+import { json } from "express";
 import cartsModel  from "../dao/db/models/carts.js";
 
 export async function getCartById(request, response){
     try{
         const cid = (request.params.cid);
         const cart = await cartsModel.findOne({_id:cid})
-        console.log(cart.cart_products)
+        console.log(JSON.stringify(cart))
         response.status(200).render('cart',cart)
     } catch (error){
         response.status(400).json(error.message)

@@ -1,10 +1,13 @@
 <h2>ID de Carrito: {{this._id}}</h2>
 
 <div>
-    {{#cart_products}}
-    <p>ID: {{_id}}</p>
-    <p>Producto:  {{products}}</p> 
-    <p>Cantidad: {{quantity}}</p>
+    {{#each this.cart_products}}
+    <p>ID: {{#products}}</p>
+    <p>Producto:  {{this.products.product_name}}</p> 
+    <p>Precio: {{this.products.product_price}}</p>
+    <p>Cantidad: {{this.quantity}}</p>
     <br><br>
-    {{/cart_products}}
+    {{/each}}
 </div>
+
+<button id="btnAtras">Volver atras</button>

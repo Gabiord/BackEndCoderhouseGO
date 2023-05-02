@@ -12,9 +12,11 @@ botonesComprar.forEach(btnComprar => {
             }
         }).then(result=>{
             if(result.status===200){
-                console.log("bien")
-                window.location.replace('/api/products');
+                window.location.replace('/api/carts/6448a0bceb2b17ca7a10adfb');
             }
         })
     })    
 });
+
+const btnAtras = document.querySelector("#btnAtras");
+
