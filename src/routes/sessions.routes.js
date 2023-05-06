@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as sessionsController from "../controllers/sessions.controller.js";
 
+
 const router = Router();
 
 router.get("/", (request, response) => {
