@@ -12,6 +12,10 @@ import * as MessagesController from "./controllers/messages.controller.js"
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
+//Midlewares de passport
 
 const app = Express();
 const productManager = new ProductManager();
@@ -78,6 +82,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
+
+//Midlewares de passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Declaraciones Router
 app.use("/", sessionRoutes)
