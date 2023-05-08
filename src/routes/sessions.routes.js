@@ -14,9 +14,9 @@ router.post("/login", passport.authenticate("login", {failureRedirect: "/fail-lo
 
 router.post("/register",passport.authenticate("register", { failureRedirect: "/fail-register" }), sessionsController.saveNewUser);
 
-router.get("/fail-register", (request, response) => {response.status(401).send({ error: "Error al procesar el registro" });});
+router.get("/fail-register", (request, response) => {response.render("fail-register")});
 
-router.get("/fail-login", (request, response) => {response.status(401).send({ error: "Error al procesar el login" });});
+router.get("/fail-login", (request, response) => {response.render("fail-login")});
 
 
 // PARA LOGINS CON GITHUB
