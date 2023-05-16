@@ -1,97 +1,60 @@
-import passport from "passport";
-import passportLocal from "passport-local";
-import GitHubStrategy from "passport-github2";
-import userModel from "../dao/db/models/users.js";
-import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";    
+import userModel from "../dao/db/models/users.js"; 
+import jwtStrategy from "passport-jwt";
+import PRIVATE_KEY from "../utils.js"
 
-// Declaramos nuestra estrategia
-const localStrategy = passportLocal.Strategy;
+
+const JwtStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
+
+
 
 const initializePassport = () => {
-  //Estrategia de registrar
-  passport.use("register", new localStrategy({ passReqToCallback: true, usernameField: "email" },
-      async (request, username, password, done) => {
-        const { first_name, last_name, email, age } = request.body;
-        try {
-          const user = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password),
-          };
-          const confirm = await userModel.create(user);
-          return done(null, confirm);
-        } catch (error) {
-          return done("Error registrando el usuario" + error);
+    //Estrategia de obtener Token JWT por Cookie:
+    passport.use('jwt', new JwtStrategy(
+        {
+            jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+            secretOrKey: "THESECRET7"
+        },
+        async(jwt_payload, done)=>{
+            console.log("Entrando a passport Strategy con JWT.");
+            try {
+                console.log("JWT obtenido del payload");
+                console.log(jwt_payload);
+                return done(null, jwt_payload.user)
+            } catch (error) {
+                console.error(error);
+                return done(error);
+            }
         }
-      }
-    )
-  );
+    ));
 
-  // Estrategia de Login
-  passport.use("login", new localStrategy({ passReqToCallback: true, usernameField: "email" },
-      async (request, username, password, done) => {
+    //funcion de serializacion
+    passport.serializeUser((user, done)=>{
+        done(null, user._id)
+    })
+
+    //funcion de desearlizacion
+    passport.deserializeUser(async(id, done)=>{
         try {
-          const user = await userModel.findOne({ email: username });
-          if (!user) {
-            return done(null, false);
-          }
-          if (!isValidPassword(user, password)) {
-            return done(null, false);
-          }
-
-          return done(null, user);
+            let user = await userModel.findById(id);
+            done(null, user)
         } catch (error) {
-          return done(error);
+            return done(error)
         }
-      }
-    )
-  );
+    })
+}
 
-  //Estrategia de login con Github:
-  passport.use("github",new GitHubStrategy({
-        clientID: "Iv1.d0a5569b4dd681fb",
-        clientSecret: "764bd8d3e0f8d812b3959c35f7607d92ec83bf11",
-        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
-      },async (accessToken, refreshToken, profile, done) => {
-        try {
-          let user = await userModel.findOne({ email: profile._json.email });
-          if (!user) {
-            let newUser = {
-              first_name: profile._json.name,
-              last_name: "",
-              email: profile._json.email,
-              age: 29,
-              password: "",
-              loggedBy: "Github",
-            };
-
-            const result = await userModel.create(newUser);
-            done(null, result);
-          } else {
-            done(null, user);
-          }
-        } catch (error) {
-          return done(error);
-        }
-      }
-    )
-  );
-
-  //estrategias de serializacion y deserializacion
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    try {
-      let user = await userModel.findById(id);
-      done(null, user);
-    } catch (error) {
-      console.error("Error deserializando el usuario" + user);
+// funcion para extraer la cookie
+const cookieExtractor = req =>{
+    let token = null;
+    if(req && req.cookies){ 
+       token = req.cookies['jwtCookieToken'];
     }
-  });
-};
+    console.log(token);
+    return token;
+}
+
 
 export default initializePassport;
+

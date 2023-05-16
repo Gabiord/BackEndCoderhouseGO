@@ -9,14 +9,12 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import ProductManager from "./dao/filesystem/services/product.service.js";
 import "./db.js";
-import * as MessagesController from "./controllers/messages.controller.js"
-import session from "express-session";
+import * as MessagesController from "./controllers/messages.controller.js";
 import MongoStore from "connect-mongo";
 
-import passport from "passport";
-import initializePassport from "./config/passport.config.js";
-
-//Midlewares de passport
+//Imports de passport
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 
 const app = Express();
 const productManager = new ProductManager();
@@ -59,6 +57,9 @@ socketServer.on("connection", async(socket) => {
 
 });
 
+//Middlewares Passport
+initializePassport();
+app.use(passport.initialize());
 
 //Configuracion Postman
 app.use(Express.json());
@@ -72,23 +73,6 @@ app.set("view engine", "handlebars");
 //Configuracion para utilizar carpeta public
 app.use(Express.static(__dirname + "/public"));
 
-//Configuracion para sesiones
-app.use(session({
-  store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL,
-      mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
-      ttl: 45
-      }),
-  secret: "thesecret",
-  resave: false,
-  saveUninitialized: true
-}))
-
-
-//Midlewares de passport
-initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
 
 //Declaraciones Router
 app.use("/", sessionRoutes)

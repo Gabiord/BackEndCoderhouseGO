@@ -4,19 +4,25 @@ import passport from "passport";
 
 const router = Router();
 
-router.get("/", (request, response) => {response.render("login");});
 
-router.get("/register", (request, response) => {response.render("register");});
+//RENDERIZADO DE VISTAS
+
+router.get("/", sessionsController.renderLogin);
+
+router.get("/register", sessionsController.renderRegistrer);
 
 router.get("/logout", sessionsController.logoutUser);
 
-router.post("/login", passport.authenticate("login", {failureRedirect: "/fail-login"}),sessionsController.loginUser);
+router.get("/fail-register", sessionsController.failRegistrer);
+
+router.get("/fail-login", sessionsController.failLogin);
+
+
+//POSTS 
+router.post("/login",sessionsController.loginUser);
 
 router.post("/register",passport.authenticate("register", { failureRedirect: "/fail-register" }), sessionsController.saveNewUser);
 
-router.get("/fail-register", (request, response) => {response.render("fail-register")});
-
-router.get("/fail-login", (request, response) => {response.render("fail-login")});
 
 
 // PARA LOGINS CON GITHUB

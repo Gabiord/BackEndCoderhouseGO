@@ -8,7 +8,12 @@ const userSchema = new mongoose.Schema({
     age: { type: Number, max: 100 },
     email: { type: String, unique: true, max: 50 },
     password: { type: String, max: 50 },
-    loggedBy: { type: String }
+    loggedBy: { type: String },
+    role: {
+        type: String,
+        default: "user",
+        enum: ["user","admin"]
+    }
 });
 
 const userModel = mongoose.model(userCollection, userSchema);
