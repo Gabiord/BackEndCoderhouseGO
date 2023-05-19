@@ -16,6 +16,4 @@ router.get("/",
 
 
 
-router.post("/", ProductController.saveNewProduct);
-
 export default router;

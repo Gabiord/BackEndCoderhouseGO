@@ -1,9 +1,12 @@
-import { Router, request, response } from "express";
+import { Router} from "express";
 import * as sessionsController from "../controllers/sessions.controller.js";
 import passport from "passport";
+import { passportCall, authorization} from "../utils.js";
+import cookieParser from 'cookie-parser';
 
 const router = Router();
 
+router.use(cookieParser()); 
 
 //RENDERIZADO DE VISTAS
 
@@ -17,12 +20,17 @@ router.get("/fail-register", sessionsController.failRegistrer);
 
 router.get("/fail-login", sessionsController.failLogin);
 
+router.get("/current", 
+    passportCall('jwt'),
+    authorization("user"),  
+    sessionsController.sessionCurrent
+)
 
 //POSTS 
 router.post("/login",sessionsController.loginUser);
 
-router.post("/register",passport.authenticate("register", { failureRedirect: "/fail-register" }), sessionsController.saveNewUser);
-
+router.post("/register", sessionsController.saveNewUser);
+ 
 
 
 // PARA LOGINS CON GITHUB

@@ -1,7 +1,8 @@
 import passport from "passport";    
 import userModel from "../dao/db/models/users.js"; 
 import jwtStrategy from "passport-jwt";
-import PRIVATE_KEY from "../utils.js"
+import dotenv from "dotenv";
+import GitHubStrategy from "passport-github2";
 
 
 const JwtStrategy = jwtStrategy.Strategy;
@@ -14,13 +15,10 @@ const initializePassport = () => {
     passport.use('jwt', new JwtStrategy(
         {
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-            secretOrKey: "THESECRET7"
+            secretOrKey: process.env.PRIVATE_KEY
         },
         async(jwt_payload, done)=>{
-            console.log("Entrando a passport Strategy con JWT.");
             try {
-                console.log("JWT obtenido del payload");
-                console.log(jwt_payload);
                 return done(null, jwt_payload.user)
             } catch (error) {
                 console.error(error);
@@ -28,6 +26,35 @@ const initializePassport = () => {
             }
         }
     ));
+
+
+    //Estrategia de login con Github:
+    passport.use("github",new GitHubStrategy({
+        clientID: "Iv1.d0a5569b4dd681fb",
+        clientSecret: "764bd8d3e0f8d812b3959c35f7607d92ec83bf11",
+        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+        },async (accessToken, refreshToken, profile, done) => {
+            let user = await userModel.findOne({ email: profile._json.email });
+            if (!user) {
+              let newUser = {
+                first_name: profile._json.name,
+                last_name: "",
+                email: profile._json.email,
+                age: 29,
+                password: "",
+                loggedBy: "Github",
+              };
+  
+              const result = await userModel.create(newUser);
+              done(null, result);
+            } else {
+              done(null, user);
+            }  
+         }
+            )
+        );
+    
+
 
     //funcion de serializacion
     passport.serializeUser((user, done)=>{
@@ -50,6 +77,7 @@ const cookieExtractor = req =>{
     let token = null;
     if(req && req.cookies){ 
        token = req.cookies['jwtCookieToken'];
+       console.log(token);
     }
     console.log(token);
     return token;

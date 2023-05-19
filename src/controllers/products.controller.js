@@ -42,10 +42,8 @@ export async function getProducts(request, response){
             "sj":response.limit,
         }
 
-        
 
         const sessionUser = request.user
-
         const sessionAdmin = false
 
         respuesta.prevLink = respuesta.hasPrevPage?`http://localhost:8080/api/products?limit=${limit?limit:''}&page=${respuesta.prevPage}&query=${query?query:''}&sort=${sort?sort:''}`:'';

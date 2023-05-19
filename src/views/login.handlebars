@@ -1,11 +1,11 @@
 <div>
-    <form action="/login" method="POST">
+    <form action="/api/sessions/login" method="POST">
         <input type="text" name="email" placeholder="email">
         <br/>
         <input type="password" name="password" placeholder="password">
         <br/>
         <input type="submit" value="Login">
     </form>
-    <p>No estas registrado?</p><a href="http://localhost:8080/register">Registrate aqui</a>
-    <p><a href="http://localhost:8080/github">Entrar con Github</a></p>
+    <p>No estas registrado?</p><a href="http://localhost:8080/api/sessions/register">Registrate aqui</a>
+    <p><a href="http://localhost:8080/api/sessions/github">Entrar con Github</a></p>
 </div>

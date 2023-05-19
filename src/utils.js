@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
+import dotenv from "dotenv";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,6 +14,7 @@ export default __dirname;
 const salt = bcrypt.genSaltSync(10);
 export const createHash = password => bcrypt.hashSync(password,salt)
 
+
 //Validamos la contraseña con la que esta en la BD
 export const isValidPassword = (user, password) => {
     return bcrypt.compareSync(password, user.password) // esto devuelve un true o falso
@@ -20,12 +22,10 @@ export const isValidPassword = (user, password) => {
 
 
 // Implementacion de JsonWebToken
-
-export const PRIVATE_KEY = "THESECRET7"
-
 export const generateJWToken = (user) => {
-    return jwt.sign({user}, PRIVATE_KEY, {expiresIn: "24h"});
+    return jwt.sign({user}, process.env.PRIVATE_KEY, {expiresIn: "1h"});
 }
+
 
 // para manejo de errores
 export const passportCall = (strategy) => {
@@ -33,6 +33,7 @@ export const passportCall = (strategy) => {
         console.log("Entrando a llamar strategy: ");
         console.log(strategy);
         passport.authenticate(strategy, function (error, user, info) {
+
             if (error) return next(error);
             if (!user) {
                 return response.status(401).send({error: info.messages?info.messages:info.toString()});

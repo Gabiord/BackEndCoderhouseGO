@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/:cid", CartsController.getCartById);
 
-router.post("/", CartsController.saveNewCart);
+router.get("/", CartsController.saveNewCart);
 
 //DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
 router.delete("/:cid/products/:pid", CartsController.deleteProductofCart);

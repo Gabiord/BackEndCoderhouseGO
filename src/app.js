@@ -75,7 +75,7 @@ app.use(Express.static(__dirname + "/public"));
 
 
 //Declaraciones Router
-app.use("/", sessionRoutes)
+app.use("/api/sessions", sessionRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/messages", messagesRoutes);

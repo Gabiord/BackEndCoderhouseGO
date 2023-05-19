@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "user",
         enum: ["user","admin"]
-    }
+    },
+    cart: {type: String, default:""}
 });
 
 const userModel = mongoose.model(userCollection, userSchema);
