@@ -1,8 +1,9 @@
-import Router from 'express';
-import userModel from "../dao/db/models/users.js";
-import cartsModel from '../dao/db/models/carts.js';
 import { createHash, generateJWToken, isValidPassword } from "../utils.js";
+import { buscarenBD, crearNuevoUsuario } from "../dao/db/services/sessions.service.js";
+import { crearNuevoCarrito } from '../dao/db/services/cart.service.js';
 
+
+//RENDERIZADO DE VISTAS
 
 export function renderLogin(request, response){response.render("login")}
 
@@ -14,11 +15,23 @@ export function renderFailLogin(request, response){response.render("fail-login")
 
 export function renderLoginGithub(request, response){response.render("github-login")}
 
+export function sessionCurrent(request, response){
+    const sessionUser = request.user
+    const sessionAdmin = false
+    response.render("sessionCurrent", {sessionUser, sessionAdmin})
+}
+
+export async function logoutUser(request, response){
+    response.clearCookie("jwtCookieToken").redirect("/api/sessions/")
+}
+
+
+// POSTS
 
 export async function loginUser(request, response){
     const {email, password} = request.body;
     try {
-        const user = await userModel.findOne({email: email})
+        const user = await buscarenBD(email)
 
         if(!user){return response.redirect("/api/sessions/fail-login")}
         if(!isValidPassword(user, password)){return response.redirect("/api/sessions/fail-login")}
@@ -46,10 +59,10 @@ export async function saveNewUser(request,response){
     const {first_name, last_name, age, email, password} = request.body;
 
     try {
-        const verif = await userModel.findOne({email})
+        const verif = await buscarenBD(email)
+
         if(verif){return response.redirect("/api/sessions/fail-register")}
 
-        
         const newUser={
             first_name,
             last_name,
@@ -58,8 +71,10 @@ export async function saveNewUser(request,response){
             password: createHash(password)
         }
 
-        const user = await userModel.create(newUser)
-        const cart = await cartsModel.create({cart_idUsuario: user._id})
+        const user = await crearNuevoUsuario(newUser)
+        const cart = await crearNuevoCarrito(user.id)
+
+
 
         response.status(200).redirect("/api/sessions/")
 
@@ -68,15 +83,8 @@ export async function saveNewUser(request,response){
     }
 }
 
-export async function logoutUser(request, response){
-    response.clearCookie("jwtCookieToken").redirect("/api/sessions/")
-}
 
-export function sessionCurrent(request, response){
-    const sessionUser = request.user
-    const sessionAdmin = false
-    response.render("sessionCurrent", {sessionUser, sessionAdmin})
-}
+// PARA LOGINS CON GITHUB
 
 export async function githubLogin(request, response){
     const user = request.user;

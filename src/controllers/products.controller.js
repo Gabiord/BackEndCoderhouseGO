@@ -1,9 +1,10 @@
 import productsModel from "../dao/db/models/products.js"
+import { cargarNuevoProducto } from "../dao/db/services/products.service.js";
 
 export async function saveNewProduct(request,response){
     try {
         const {body} = request;
-        const confirm = await productsModel.create(newProduct);
+        const newProduct = cargarNuevoProducto(body);
         response.status(200).json(confirm)
 
     } catch (error) {

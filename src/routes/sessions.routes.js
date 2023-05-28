@@ -14,11 +14,11 @@ router.get("/", sessionsController.renderLogin);
 
 router.get("/register", sessionsController.renderRegistrer);
 
-router.get("/logout", sessionsController.logoutUser);
- 
 router.get("/fail-register", sessionsController.renderFailRegistrer);
 
 router.get("/fail-login", sessionsController.renderFailLogin);
+
+router.get("/githubsession",sessionsController.renderLoginGithub)
 
 router.get("/current", 
     passportCall('jwt'),
@@ -26,17 +26,18 @@ router.get("/current",
     sessionsController.sessionCurrent
 )
 
-router.get("/githubsession",sessionsController.renderLoginGithub)
+router.get("/logout", sessionsController.logoutUser);
+ 
 
 
 
 
 //POSTS 
+
 router.post("/login",sessionsController.loginUser);
 
 router.post("/register", sessionsController.saveNewUser);
  
-
 
 // PARA LOGINS CON GITHUB
 
