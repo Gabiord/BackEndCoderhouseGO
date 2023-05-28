@@ -3,7 +3,6 @@ import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import messagesRoutes from "./routes/message.routes.js"
 import sessionRoutes from "./routes/sessions.routes.js"
-import githubRoutes from "./routes/github-login.router.js"
 import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
@@ -11,6 +10,8 @@ import ProductManager from "./dao/filesystem/services/product.service.js";
 import "./db.js";
 import * as MessagesController from "./controllers/messages.controller.js";
 import MongoStore from "connect-mongo";
+import session from "express-session";
+
 
 //Imports de passport
 import passport from 'passport';
@@ -57,6 +58,18 @@ socketServer.on("connection", async(socket) => {
 
 });
 
+//Configuracion para sesiones
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL,
+      mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
+      ttl: 45
+      }),
+  secret: "thesecret",
+  resave: false,
+  saveUninitialized: true
+}))
+
 //Middlewares Passport
 initializePassport();
 app.use(passport.initialize());
@@ -79,5 +92,4 @@ app.use("/api/sessions", sessionRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/messages", messagesRoutes);
-app.use("/github", githubRoutes);
 

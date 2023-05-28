@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     age: { type: Number, max: 100 },
     email: { type: String, unique: true, max: 50 },
     password: { type: String, max: 50 },
-    loggedBy: { type: String },
+    loggedBy: { type: String, default:"Form"},
     role: {
         type: String,
         default: "user",
@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema({
     },
     cart: {type: String, default:""}
 });
+
+
 
 const userModel = mongoose.model(userCollection, userSchema);
 

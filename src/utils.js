@@ -30,16 +30,11 @@ export const generateJWToken = (user) => {
 // para manejo de errores
 export const passportCall = (strategy) => {
     return async (request, response, next) => {
-        console.log("Entrando a llamar strategy: ");
-        console.log(strategy);
         passport.authenticate(strategy, function (error, user, info) {
-
             if (error) return next(error);
             if (!user) {
                 return response.status(401).send({error: info.messages?info.messages:info.toString()});
             }
-            console.log("Usuario obtenido del strategy: ");
-            console.log(user);
             request.user = user;
             next();
         })(request, response, next);

@@ -15,7 +15,6 @@ export async function getCartById(request, response){
 export async function saveNewCart(request,response){
     try{
         const {body} = request;
-        console.log(body)
         const confirm = await cartsModel.create(body);
         response.status(200).json(confirm)
     } catch (error) {

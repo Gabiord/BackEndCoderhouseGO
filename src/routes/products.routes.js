@@ -14,6 +14,8 @@ router.get("/",
     ProductController.getProducts
 );
 
+router.get("/", ProductController.getProducts);
+
 
 
 export default router;

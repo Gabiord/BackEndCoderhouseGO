@@ -3,14 +3,33 @@ import userModel from "../dao/db/models/users.js";
 import jwtStrategy from "passport-jwt";
 import dotenv from "dotenv";
 import GitHubStrategy from "passport-github2";
-
+import passportLocal from "passport-local";
 
 const JwtStrategy = jwtStrategy.Strategy;
 const ExtractJWT = jwtStrategy.ExtractJwt;
 
-
+// Declaramos nuestra estrategia
+const localStrategy = passportLocal.Strategy;
 
 const initializePassport = () => {
+
+     // Estrategia de Login con session
+    passport.use("login", new localStrategy({ passReqToCallback: true, usernameField: "email" },
+    async (request, username, password, done) => {
+        try {
+          const user = await userModel.findOne({ email: username });
+          if (!user) {
+            return done(null, false);
+          }
+          if (!isValidPassword(user, password)) {
+            return done(null, false);
+          }
+          return done(null, user);
+        } catch (error) {
+          return done(error);
+        }
+    }));
+
     //Estrategia de obtener Token JWT por Cookie:
     passport.use('jwt', new JwtStrategy(
         {
@@ -27,35 +46,33 @@ const initializePassport = () => {
         }
     ));
 
-
     //Estrategia de login con Github:
     passport.use("github",new GitHubStrategy({
         clientID: "Iv1.d0a5569b4dd681fb",
         clientSecret: "764bd8d3e0f8d812b3959c35f7607d92ec83bf11",
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
         },async (accessToken, refreshToken, profile, done) => {
-            let user = await userModel.findOne({ email: profile._json.email });
-            if (!user) {
-              let newUser = {
-                first_name: profile._json.name,
-                last_name: "",
-                email: profile._json.email,
-                age: 29,
-                password: "",
-                loggedBy: "Github",
-              };
-  
-              const result = await userModel.create(newUser);
-              done(null, result);
-            } else {
-              done(null, user);
-            }  
-         }
-            )
-        );
+            try {
+                let user = await userModel.findOne({ email: profile._json.email });
+                    if (!user) {
+                      let newUser = {
+                        first_name: profile._json.name,
+                        last_name: "",
+                        email: profile._json.email,
+                        age: 0,
+                        password: "",
+                        loggedBy: "Github",
+                      };
+                        const result = await userModel.create(newUser);
+                        done(null, result);
+                    } else {
+                        done(null, user);
+                    }      
+            } catch (error) {
+                return done(error)
+            }
+    }));
     
-
-
     //funcion de serializacion
     passport.serializeUser((user, done)=>{
         done(null, user._id)
@@ -73,16 +90,13 @@ const initializePassport = () => {
 }
 
 // funcion para extraer la cookie
-const cookieExtractor = req =>{
+const cookieExtractor = request =>{
     let token = null;
-    if(req && req.cookies){ 
-       token = req.cookies['jwtCookieToken'];
-       console.log(token);
+    if(request && request.cookies){ 
+       token = request.cookies['jwtCookieToken'];
     }
-    console.log(token);
     return token;
 }
-
 
 export default initializePassport;
 

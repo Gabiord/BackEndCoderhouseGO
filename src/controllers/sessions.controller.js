@@ -8,9 +8,12 @@ export function renderLogin(request, response){response.render("login")}
 
 export function renderRegistrer(request, response){response.render("register")}
 
-export function failRegistrer(request, response){response.render("fail-register")}
+export function renderFailRegistrer(request, response){response.render("fail-register")}
 
-export function failLogin(request, response){response.render("fail-login")}
+export function renderFailLogin(request, response){response.render("fail-login")}
+
+export function renderLoginGithub(request, response){response.render("github-login")}
+
 
 export async function loginUser(request, response){
     const {email, password} = request.body;
@@ -57,10 +60,7 @@ export async function saveNewUser(request,response){
 
         const user = await userModel.create(newUser)
         const cart = await cartsModel.create({cart_idUsuario: user._id})
-        
 
-        console.log(cart)
-  
         response.status(200).redirect("/api/sessions/")
 
     } catch (error) {
@@ -78,4 +78,24 @@ export function sessionCurrent(request, response){
     response.render("sessionCurrent", {sessionUser, sessionAdmin})
 }
 
-
+export async function githubLogin(request, response){
+    const user = request.user;
+    console.log(user)
+    try {
+        const userToken= {
+            name:  `${user.first_name} ${user.last_name}`,
+            email: `${user.email}`,
+            age: `${user.age}`,
+            role: `${user.role}`
+        }
+        const accessToken = generateJWToken(userToken)
+        response.cookie("jwtCookieToken", accessToken, {
+            maxAge: 60000,
+            httpOnly: true
+        })
+    } catch (error) {
+        
+    }
+    
+    response.redirect("/api/sessions/current")
+}
