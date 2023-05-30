@@ -1,30 +1,51 @@
 import Express from "express";
+import __dirname from "./utils.js";
+
+
+//Imports de Rutas
 import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import messagesRoutes from "./routes/message.routes.js"
 import sessionRoutes from "./routes/sessions.routes.js"
-import __dirname from "./utils.js";
-import handlebars from "express-handlebars";
-import { Server } from "socket.io";
-import ProductManager from "./dao/filesystem/services/product.service.js";
-import "./db.js";
-import * as MessagesController from "./controllers/messages.controller.js";
-import MongoStore from "connect-mongo";
-import session from "express-session";
+
+
+
+//Configuracion de Base de datos
+import MongoSingleton from "./config/mongdb-singleton.js";
+
+const MongoInstance = async () => {
+  try{
+      await MongoSingleton.getInstance();
+  }catch(error){
+      console.error(error)
+  }
+}
+
+MongoInstance();
+
 
 
 //Imports de passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 
+
+
 const app = Express();
-const productManager = new ProductManager();
+
+
 
 //Configuracion Servidor
 const PORT = 8080;
 const httpServer = app.listen(PORT, () => {
   console.log(`server run on port ${PORT}`);
 });
+
+
+
+//Configuracion de Sockets 
+import { Server } from "socket.io";
+import * as MessagesController from "./controllers/messages.controller.js";
 
 const socketServer = new Server(httpServer);
 
@@ -58,7 +79,11 @@ socketServer.on("connection", async(socket) => {
 
 });
 
+
+
 //Configuracion para sesiones
+import MongoStore from "connect-mongo";
+import session from "express-session";
 app.use(session({
   store: MongoStore.create({
       mongoUrl: process.env.MONGO_URL,
@@ -70,21 +95,31 @@ app.use(session({
   saveUninitialized: true
 }))
 
+
+
 //Middlewares Passport
 initializePassport();
 app.use(passport.initialize());
+
+
 
 //Configuracion Postman
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
 
+
+
 //configuracion de HBS
+import handlebars from "express-handlebars";
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views/");
 app.set("view engine", "handlebars");
 
+
+
 //Configuracion para utilizar carpeta public
 app.use(Express.static(__dirname + "/public"));
+
 
 
 //Declaraciones Router
