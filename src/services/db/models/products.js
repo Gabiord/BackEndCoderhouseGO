@@ -8,17 +8,16 @@ const productsSchema = new mongoose.Schema({
         type: String,
         require: [true, 'El nombre es requerido'],
         minlength: [3, 'El nombre es muy corto'],
-        maxlength: [10, 'El nombre es muy largo']
+        maxlength: [75, 'El nombre es muy largo']
     },
     product_description:{
         type: String,
-        require: [true, 'La descripcion es requerida'],
     },
     product_price:{
         type: Number,
         require: [true, 'El precio es requerido']
     },
-    prodduct_category:{
+    product_category:{
         type: String,
         require: [true, 'La categoria es requerida']
     },

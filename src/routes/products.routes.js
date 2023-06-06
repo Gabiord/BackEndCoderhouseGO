@@ -9,12 +9,14 @@ const router = Router();
 router.use(cookieParser()); 
 
 router.get("/", 
-    passportCall('jwt'),
-    authorization("user"), 
+    // passportCall('jwt'),
+    // authorization("user"), 
     ProductController.getProducts
 );
 
 router.get("/", ProductController.getProducts);
+
+router.post("/savenewproduct", ProductController.saveNewProduct)
 
 
 

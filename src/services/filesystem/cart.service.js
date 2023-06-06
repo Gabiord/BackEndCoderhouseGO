@@ -1,8 +1,9 @@
 import fs from "fs";
+import cartsModel from "./models/carts.js";
 
-class cartManager {
+class cartService {   
   constructor() {
-    (this.carts = new Array()),
+      (this.carts = new Array()),
       (this.DirPath = "../files"),
       (this.FilePath = this.DirPath + "/cart.json"),
       (this.fs = fs);
@@ -25,15 +26,13 @@ class cartManager {
     await this.fs.promises.writeFile(this.FilePath, archivoString);
   };
 
-  addCart = async () => {
+  createNewCart = async (prop) => {
     try {
       await this.crearDir();
       await this.bajarCarts();
 
-      let newCart = {};
-      newCart.ID = this.carts.length + 1;
-      newCart.products = [];
-
+      let newCart = new cartsModel(prop);
+     
       this.carts.push(newCart);
       this.subirCarts(this.carts);
       return {

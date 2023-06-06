@@ -1,6 +1,6 @@
 import fs from "fs";
 
-class ProductManager {
+class ProductServiceFilesSystem {
   constructor() {
     (this.products = new Array()),
       (this.DirPath = "./files"),
@@ -130,4 +130,4 @@ class ProductManager {
   };
 }
 
-export default ProductManager;
+export default ProductServiceFilesSystem;

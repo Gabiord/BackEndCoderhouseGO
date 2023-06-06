@@ -1,10 +1,14 @@
-import productsModel from "../dao/db/models/products.js"
-import { cargarNuevoProducto } from "../dao/db/services/products.service.js";
+import productsModel from "../services/db/models/products.js"
+import productDTO from "../services/dto/products.dto.js";
+import productServiceMongo from "../services/db/products.service.js";
+import { productService } from "../services/factory.js";
+
+const persistenceFactory = productService;
 
 export async function saveNewProduct(request,response){
     try {
-        const {body} = request;
-        const newProduct = cargarNuevoProducto(body);
+        const newProduct = new productDTO(request.body)
+        const confirm = ProductService.addProduct(newProduct);
         response.status(200).json(confirm)
 
     } catch (error) {
@@ -43,15 +47,14 @@ export async function getProducts(request, response){
             "sj":response.limit,
         }
 
-
-        const sessionUser = request.user
-        const sessionAdmin = false
+        // const sessionUser = request.user
+        // const sessionAdmin = false
 
         respuesta.prevLink = respuesta.hasPrevPage?`http://localhost:8080/api/products?limit=${limit?limit:''}&page=${respuesta.prevPage}&query=${query?query:''}&sort=${sort?sort:''}`:'';
         respuesta.nextLink = respuesta.hasNextPage?`http://localhost:8080/api/products?limit=${limit?limit:''}&page=${respuesta.nextPage}&query=${query?query:''}&sort=${sort?sort:''}`:'';
         respuesta.isValid= !(page<=0||page>respuesta.totalPages)
 
-        response.status(200).render('products',{respuesta, sessionUser, sessionAdmin})
+        response.status(200).json(respuesta)
 
     } catch (error) {
         response.status(400).json(error.message)

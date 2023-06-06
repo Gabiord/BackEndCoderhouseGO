@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
-export default class MongoSingleton{
+export default class MongoSingleton {
+    
     static #instance;
 
     constructor(){

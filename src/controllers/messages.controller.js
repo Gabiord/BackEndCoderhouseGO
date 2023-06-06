@@ -1,4 +1,4 @@
-import  messageModel  from "../dao/db/models/messages.js";
+import  messageModel  from "../services/db/models/messages.js";
 
 export async function saveNewMessage(request, response){
     try {

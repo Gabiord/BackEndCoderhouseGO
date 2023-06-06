@@ -1,34 +1,13 @@
 import passport from "passport";    
-import userModel from "../dao/db/models/users.js"; 
+import userModel from "../services/db/models/users.js"; 
 import jwtStrategy from "passport-jwt";
-import dotenv from "dotenv";
 import GitHubStrategy from "passport-github2";
-import passportLocal from "passport-local";
+import userDTO from "../services/dto/user.dto.js";
 
 const JwtStrategy = jwtStrategy.Strategy;
 const ExtractJWT = jwtStrategy.ExtractJwt;
 
-// Declaramos nuestra estrategia
-const localStrategy = passportLocal.Strategy;
-
 const initializePassport = () => {
-
-     // Estrategia de Login con session
-    passport.use("login", new localStrategy({ passReqToCallback: true, usernameField: "email" },
-    async (request, username, password, done) => {
-        try {
-          const user = await userModel.findOne({ email: username });
-          if (!user) {
-            return done(null, false);
-          }
-          if (!isValidPassword(user, password)) {
-            return done(null, false);
-          }
-          return done(null, user);
-        } catch (error) {
-          return done(error);
-        }
-    }));
 
     //Estrategia de obtener Token JWT por Cookie:
     passport.use('jwt', new JwtStrategy(
@@ -38,7 +17,8 @@ const initializePassport = () => {
         },
         async(jwt_payload, done)=>{
             try {
-                return done(null, jwt_payload.user)
+                const datos = new userDTO(jwt_payload.user)
+                return done(null, datos)
             } catch (error) {
                 console.error(error);
                 return done(error);
