@@ -1,6 +1,8 @@
 import Express from "express";
 import __dirname from "./utils.js";
 
+const app = Express();
+
 
 //Imports de Rutas
 import productRoutes from "./routes/products.routes.js";
@@ -24,15 +26,17 @@ const MongoInstance = async () => {
 MongoInstance();
 
 
-
 //Imports de passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 
 
 
-const app = Express();
 
+
+//importacion de cors 
+import cors from 'cors'; 
+app.use(cors());
 
 
 //Configuracion Servidor
