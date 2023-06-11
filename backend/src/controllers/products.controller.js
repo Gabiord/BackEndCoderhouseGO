@@ -61,3 +61,13 @@ export async function getProducts(request, response){
     }
 }
 
+export async function getProductsById(request, response){
+    try {
+        let id = request.params.id;
+        const respuesta = await productService.getProductsByI(id)
+        response.status(200).json(respuesta)
+
+    } catch (error) {
+        response.status(400).json(error.message)
+    }
+}

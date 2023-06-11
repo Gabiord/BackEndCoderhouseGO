@@ -14,7 +14,7 @@ router.get("/",
     ProductController.getProducts
 );
 
-router.get("/", ProductController.getProducts);
+router.get("/:id", ProductController.getProductsById)
 
 router.post("/savenewproduct", ProductController.saveNewProduct)
 
