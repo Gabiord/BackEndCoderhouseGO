@@ -16,6 +16,10 @@ export async function saveNewProduct(request,response){
     }
 }
 
+
+
+
+
 export async function getProducts(request, response){
     try {
         let limit = Number(request.query.limit);

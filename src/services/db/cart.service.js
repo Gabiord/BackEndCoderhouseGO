@@ -2,17 +2,16 @@ import cartsModel from "./models/carts.js";
 
 
 class cartService{
-    constructor(){
-
-    }
+    constructor(){}
 
     createNewCart = async(prop) => {
         const cart = await cartsModel.create({cart_idUsuario: prop})
         return cart
     }
 
-    addProductToCart = async(cid, pid) => {
-
+    getCartById = async(prop) => {
+        const cart = await cartsModel.findById(prop)
+        return cart
     }
 
 }
