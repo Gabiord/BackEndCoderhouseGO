@@ -22,7 +22,7 @@ router.get("/githubsession",sessionsController.renderLoginGithub)
 
 router.get("/current", 
     passportCall('jwt'),
-    authorization("user"),  
+    // authorization("user"),  
     sessionsController.sessionCurrent
 )
 

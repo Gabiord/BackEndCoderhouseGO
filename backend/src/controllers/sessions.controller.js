@@ -19,7 +19,8 @@ export function renderLoginGithub(request, response){response.render("github-log
 
 export function sessionCurrent(request, response){
     const sessionUser = request.user
-    const sessionAdmin = false
+    console.log(sessionUser)
+    const sessionAdmin =false
     response.json(sessionUser)
 }
 
@@ -42,10 +43,10 @@ export async function loginUser(request, response){
 
         //Creamos la Cookie
         response.cookie("jwtCookieToken", accessToken, {
-            maxAge: 60000,
+            maxAge: 120000,
             httpOnly: true
         })
-        response.redirect("/api/sessions/current");
+        response.json(user)
     
     } catch (error) {
        response.status(400).json(error.message)
