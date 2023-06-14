@@ -5,7 +5,7 @@ class cartService{
     constructor(){}
 
     createNewCart = async(prop) => {
-        const cart = await cartsModel.create({cart_idUsuario: prop})
+        const cart = await cartsModel.create(prop)
         return cart
     }
 

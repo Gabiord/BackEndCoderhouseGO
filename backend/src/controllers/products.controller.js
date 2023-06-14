@@ -1,6 +1,5 @@
 import productsModel from "../services/db/models/products.js"
 import productDTO from "../services/dto/products.dto.js";
-import productServiceMongo from "../services/db/products.service.js";
 import { productService } from "../services/factory.js";
 
 const persistenceFactory = productService;
@@ -15,10 +14,6 @@ export async function saveNewProduct(request,response){
         response.status(400).json(error.message)
     }
 }
-
-
-
-
 
 export async function getProducts(request, response){
     try {
@@ -75,3 +70,4 @@ export async function getProductsById(request, response){
         response.status(400).json(error.message)
     }
 }
+
